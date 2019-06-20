@@ -28,6 +28,7 @@ __all__ = ["decode_and_evaluate", "get_translation"]
 
 
 def decode_and_evaluate(name,
+                        text,
                         model,
                         sess,
                         trans_file,
@@ -41,7 +42,9 @@ def decode_and_evaluate(name,
                         infer_mode="greedy"):
   """Decode a test set and compute a score according to the evaluation task."""
   # Decode
+  translations = []
   if decode:
+
     utils.print_out("  decoding to output %s" % trans_file)
 
     start_time = time.time()
@@ -71,12 +74,16 @@ def decode_and_evaluate(name,
                   sent_id,
                   tgt_eos=tgt_eos,
                   subword_option=subword_option)
+              translations.append(translation)
+
               trans_f.write((translation + b"\n").decode("utf-8"))
         except tf.errors.OutOfRangeError:
           utils.print_time(
               "  done, num sentences %d, num translations per input %d" %
               (num_sentences, num_translations_per_input), start_time)
           break
+
+  return translations
 
   # Evaluation
   evaluation_scores = {}
