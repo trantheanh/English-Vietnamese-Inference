@@ -1,5 +1,6 @@
 import os
 import utils.common_utils as utils
+from zipfile import ZipFile
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -16,7 +17,9 @@ def start():
 
     # Unzip model
     print("START UNZIP MODEL")
-    os.system('tar xvf "{}"'.format(file_path))
+    with ZipFile(file_path, 'r') as zipObj:
+        # Extract all the contents of zip file in different directory
+        zipObj.extractall()
 
 
 def translation(text=""):
@@ -31,3 +34,6 @@ def translation(text=""):
         print(result)
 
     return result
+
+
+translation("Hi")
