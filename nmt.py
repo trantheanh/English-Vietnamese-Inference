@@ -624,7 +624,7 @@ def create_or_load_hparams(
   return hparams
 
 
-def run_main(flags, default_hparams, inference_fn, target_session=""):
+def run_main(flags,text, default_hparams, inference_fn, target_session=""):
   """Run main."""
   # Job
   jobid = flags.jobid
@@ -683,8 +683,8 @@ def run_main(flags, default_hparams, inference_fn, target_session=""):
 
     if not ckpt:
       ckpt = tf.train.latest_checkpoint(out_dir)
-    inference_fn(ckpt, flags.inference_input_file,
-                 trans_file, hparams, num_workers, jobid)
+    return inference_fn(ckpt, text, flags.inference_input_file,
+                         trans_file, hparams, num_workers, jobid)
 
 
 def translate(text):
@@ -694,4 +694,4 @@ def translate(text):
     default_hparams = create_hparams(FLAGS)
     # train_fn = train.train
     inference_fn = inference.inference
-    run_main(FLAGS, default_hparams, inference_fn)
+    return  run_main(FLAGS,text, default_hparams, inference_fn)

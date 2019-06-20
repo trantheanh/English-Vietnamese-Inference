@@ -55,6 +55,8 @@ def _decode_inference_indices(model, sess, output_infer,
           tgt_eos=tgt_eos,
           subword_option=subword_option)
 
+      print("---------{}".format(translation))
+
       if infer_summary is not None:  # Attention models
         image_file = output_infer_summary_prefix + str(decode_id) + ".png"
         utils.print_out("  save attention image to %s*" % image_file)
@@ -106,6 +108,7 @@ def start_sess_and_load_model(infer_model, ckpt_path):
 
 
 def inference(ckpt_path,
+              text,
               inference_input_file,
               inference_output_file,
               hparams,
@@ -123,8 +126,9 @@ def inference(ckpt_path,
   sess, loaded_infer_model = start_sess_and_load_model(infer_model, ckpt_path)
 
   if num_workers == 1:
-    single_worker_inference(
+    translations = single_worker_inference(
         sess,
+        text,
         infer_model,
         loaded_infer_model,
         inference_input_file,
@@ -141,9 +145,11 @@ def inference(ckpt_path,
         num_workers=num_workers,
         jobid=jobid)
   sess.close()
+  return translations
 
 
 def single_worker_inference(sess,
+                            text,
                             infer_model,
                             loaded_infer_model,
                             inference_input_file,
@@ -153,7 +159,8 @@ def single_worker_inference(sess,
   output_infer = inference_output_file
 
   # Read data
-  infer_data = load_data(inference_input_file, hparams)
+  # infer_data = load_data(inference_input_file, hparams)
+  infer_data = [text]
   print("----------------" + str(infer_data))
 
   with infer_model.graph.as_default():
@@ -175,18 +182,22 @@ def single_worker_inference(sess,
           tgt_eos=hparams.eos,
           subword_option=hparams.subword_option)
     else:
-      nmt_utils.decode_and_evaluate(
-          "infer",
-          loaded_infer_model,
-          sess,
-          output_infer,
-          ref_file=None,
-          metrics=hparams.metrics,
-          subword_option=hparams.subword_option,
-          beam_width=hparams.beam_width,
-          tgt_eos=hparams.eos,
-          num_translations_per_input=hparams.num_translations_per_input,
-          infer_mode=hparams.infer_mode)
+      translations = nmt_utils.decode_and_evaluate(
+                      "infer",
+                      text,
+                      loaded_infer_model,
+                      sess,
+                      output_infer,
+                      ref_file=None,
+                      metrics=hparams.metrics,
+                      subword_option=hparams.subword_option,
+                      beam_width=hparams.beam_width,
+                      tgt_eos=hparams.eos,
+                      num_translations_per_input=hparams.num_translations_per_input,
+                      infer_mode=hparams.infer_mode)
+      return translations
+
+
 
 
 def multi_worker_inference(sess,

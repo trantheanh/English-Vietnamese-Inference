@@ -25,7 +25,4 @@ def start():
 
 def translation(text=""):
     start()
-    print(nmt.translate("Good morning"))
-
-
-translation("Hi")
+    return nmt.translate(text)[0].decode("utf-8")
