@@ -1,6 +1,7 @@
 import os
 from zipfile import ZipFile
 import nmt
+import utils.common_utils as utils
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
