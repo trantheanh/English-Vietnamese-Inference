@@ -147,9 +147,9 @@ def add_arguments(parser):
                             "between [-this, this]."))
 
   # data
-  parser.add_argument("--src", type=str, default=None,
+  parser.add_argument("--src", type=str, default="en",
                       help="Source suffix, e.g., en.")
-  parser.add_argument("--tgt", type=str, default=None,
+  parser.add_argument("--tgt", type=str, default="vi",
                       help="Target suffix, e.g., de.")
   parser.add_argument("--train_prefix", type=str, default=None,
                       help="Train prefix, expect files with src/tgt suffixes.")
@@ -157,11 +157,11 @@ def add_arguments(parser):
                       help="Dev prefix, expect files with src/tgt suffixes.")
   parser.add_argument("--test_prefix", type=str, default=None,
                       help="Test prefix, expect files with src/tgt suffixes.")
-  parser.add_argument("--out_dir", type=str, default=None,
+  parser.add_argument("--out_dir", type=str, default="output_inference/result",
                       help="Store log/model files.")
 
   # Vocab
-  parser.add_argument("--vocab_prefix", type=str, default=None, help="""\
+  parser.add_argument("--vocab_prefix", type=str, default="pretrained_model/vocab", help="""\
       Vocab prefix, expect files with src/tgt suffixes.\
       """)
   parser.add_argument("--embed_prefix", type=str, default=None, help="""\
@@ -249,7 +249,7 @@ def add_arguments(parser):
       """)
   parser.add_argument("--scope", type=str, default=None,
                       help="scope to put variables under")
-  parser.add_argument("--hparams_path", type=str, default=None,
+  parser.add_argument("--hparams_path", type=str, default="standard_hparams/iwslt15.json",
                       help=("Path to standard hparams json file that overrides"
                             "hparams values from FLAGS."))
   parser.add_argument("--random_seed", type=int, default=None,
@@ -269,16 +269,16 @@ def add_arguments(parser):
                       help="True to train a language model, ignoring encoder")
 
   # Inference
-  parser.add_argument("--ckpt", type=str, default="",
+  parser.add_argument("--ckpt", type=str, default="pretrained_model/translate.ckpt",
                       help="Checkpoint file to load a model for inference.")
-  parser.add_argument("--inference_input_file", type=str,
+  parser.add_argument("--inference_input_file", type=str, default="input_inference/input.txt",
                       help="Set to the text to decode.")
   parser.add_argument("--inference_list", type=str, default=None,
                       help=("A comma-separated list of sentence indices "
                             "(0-based) to decode."))
   parser.add_argument("--infer_batch_size", type=int, default=32,
                       help="Batch size for inference mode.")
-  parser.add_argument("--inference_output_file", type=str, default=None,
+  parser.add_argument("--inference_output_file", type=str, default="output_inference/result.txt",
                       help="Output file to store decoding results.")
   parser.add_argument("--inference_ref_file", type=str, default=None,
                       help=("""\
@@ -686,27 +686,12 @@ def run_main(flags, default_hparams, inference_fn, target_session=""):
     inference_fn(ckpt, flags.inference_input_file,
                  trans_file, hparams, num_workers, jobid)
 
-    # Evaluation
-    ref_file = flags.inference_ref_file
-    if ref_file and tf.gfile.Exists(trans_file):
-      for metric in hparams.metrics:
-        score = evaluation_utils.evaluate(
-            ref_file,
-            trans_file,
-            metric,
-            hparams.subword_option)
-        utils.print_out("  %s: %.1f" % (metric, score))
 
-
-def main(unused_argv):
-  default_hparams = create_hparams(FLAGS)
-  # train_fn = train.train
-  inference_fn = inference.inference
-  run_main(FLAGS, default_hparams, inference_fn)
-
-
-if __name__ == "__main__":
-  nmt_parser = argparse.ArgumentParser()
-  add_arguments(nmt_parser)
-  FLAGS, unparsed = nmt_parser.parse_known_args()
-  tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+def translate(text):
+    nmt_parser = argparse.ArgumentParser()
+    add_arguments(nmt_parser)
+    FLAGS, unparsed = nmt_parser.parse_known_args()
+    default_hparams = create_hparams(FLAGS)
+    # train_fn = train.train
+    inference_fn = inference.inference
+    run_main(FLAGS, default_hparams, inference_fn)

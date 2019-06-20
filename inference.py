@@ -154,6 +154,7 @@ def single_worker_inference(sess,
 
   # Read data
   infer_data = load_data(inference_input_file, hparams)
+  print("----------------" + str(infer_data))
 
   with infer_model.graph.as_default():
     sess.run(

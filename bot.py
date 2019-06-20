@@ -1,6 +1,7 @@
 import os
 import utils.common_utils as utils
 from zipfile import ZipFile
+import nmt
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -24,16 +25,7 @@ def start():
 
 def translation(text=""):
     start()
-    with open("input_inference/input.txt", 'w') as f:
-        f.write(text + " .\n")
-
-    os.system("python nmt.py --src=en --tgt=vi --ckpt=pretrained_model/translate.ckpt --hparams_path=standard_hparams/iwslt15.json --out_dir=output_inference/result --vocab_prefix=pretrained_model/vocab --inference_input_file=input_inference/input.txt --inference_output_file=output_inference/result.txt")
-
-    with open("output_inference/result.txt", 'r', encoding='utf-8') as f:
-        result = f.read()
-        print(result)
-
-    return result
+    print(nmt.translate("Good morning"))
 
 
 translation("Hi")
