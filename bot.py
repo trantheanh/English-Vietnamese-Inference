@@ -25,10 +25,9 @@ def translation(text=""):
     with open("input_inference/input.txt", 'w') as f:
         f.write(text + " .\n")
 
-
     os.system("python nmt.py --src=en --tgt=vi --ckpt=pretrained_model/translate.ckpt --hparams_path=standard_hparams/iwslt15.json --out_dir=output_inference/result --vocab_prefix=pretrained_model/vocab --inference_input_file=input_inference/input.txt --inference_output_file=output_inference/result.txt")
 
-    with open("output_inference/result.txt", 'r', encoding='utf-8') as f:
+    with open("output_inference/result.txt", 'r') as f:
         result = f.read()
         print(result)
 
