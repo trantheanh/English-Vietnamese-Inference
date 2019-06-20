@@ -1,3 +1,4 @@
 .idea/*
+.idea/workspace.xml
 pretrained_model/
 pretrained_model.zip
