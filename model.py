@@ -27,7 +27,7 @@ import model_helper
 from utils import iterator_utils
 from utils import misc_utils as utils
 
-utils.check_tensorflow_version()
+# utils.check_tensorflow_version()
 
 __all__ = ["BaseModel", "Model"]
 

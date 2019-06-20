@@ -23,8 +23,8 @@ def translate():
     response = generate_response(0, output)
     return response
 
-def generate_response(code=0, message='', output=None):
-    response = {'code': code, 'message': message, 'output': output}
+def generate_response(code=0, output=None):
+    response = {'code': code, 'output': output}
     res = json.dumps(response)
     response = make_response(res)
     response.headers['Content-Type'] = 'application/json'

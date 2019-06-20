@@ -31,7 +31,7 @@ from utils import evaluation_utils
 from utils import misc_utils as utils
 from utils import vocab_utils
 
-utils.check_tensorflow_version()
+# utils.check_tensorflow_version()
 
 FLAGS = None
 
