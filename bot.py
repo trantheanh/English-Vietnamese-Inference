@@ -1,5 +1,4 @@
 import os
-import utils.common_utils as utils
 from zipfile import ZipFile
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
