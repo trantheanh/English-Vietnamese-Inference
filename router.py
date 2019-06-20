@@ -31,8 +31,8 @@ def generate_response(code=0, message='', output=None):
     return response
 
 if __name__ == '__main__':
-    # print('Testing first...')
-    # translation('Hi')
+    print('Testing first...')
+    translation('Hi')
     port = int(os.environ.get("PORT", 5000))
     print("Starting app on port %d" % port)
     app.run(threaded=True, debug=False, port=port,host = '0.0.0.0')
