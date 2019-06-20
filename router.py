@@ -11,6 +11,10 @@ app = Flask(__name__)
 cors = CORS(app)
 
 
+@app.route("/")
+def hello():
+    return "Welcome Wisdom Seeker!"
+
 @app.route('/api/translate', endpoint='translate', methods=['POST'])
 def translate():
     raw_request = request.get_json(silent=True, force=True)
