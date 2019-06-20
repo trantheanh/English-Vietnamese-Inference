@@ -13,7 +13,7 @@ cors = CORS(app)
 
 @app.route("/")
 def index():
-    return "Welcome to Wisdom Seeker!"
+    return "Welcome to Wisdom Seeker! 19:03"
 
 @app.route('/api/translate', endpoint='translate', methods=['POST'])
 def translate():
