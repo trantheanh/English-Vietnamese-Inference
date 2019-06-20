@@ -9,7 +9,6 @@ def start():
     if os.path.isdir("pretrained_model"):
         return
 
-    # Download model
     # print("START DOWNLOAD MODEL")
     # id_str = '1Y0u3V9Ml9m4vgEaylVy5xEgKzpkmZVfg'
     file_path = os.path.join(CURRENT_PATH, "pretrained_model.zip")
