@@ -1,0 +1,10 @@
+tensorflow
+scikit-learn
+h5py
+Pillow
+psutil
+Flask-Jsonpify==1.5.0
+Flask==0.10.1
+future==0.17.1
+requests==2.11.1
+Flask-Cors==3.0.3
